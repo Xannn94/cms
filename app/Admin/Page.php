@@ -4,11 +4,17 @@ use App\Model\Page;
 use SleepingOwl\Admin\Model\ModelConfiguration;
 
 AdminSection::registerModel(Page::class, function (ModelConfiguration $model) {
-    $model->setTitle('Страницы');
-
+    /*App::setLocale('ru');*/
+    $model->setTitle(Lang::get('pages.title'));
     // Display
     $model->onDisplay(function () {
-        return AdminDisplay::tree()->setValue('title');
+       $display = AdminDisplay::tree()->setValue('title');
+
+       $display->setApply(function ($query) {
+            $query->where('lang', Lang::getLocale());
+       });
+
+      return $display;
     });
 
     // Create And Edit

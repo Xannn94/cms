@@ -43,6 +43,28 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Application multilang
+    |--------------------------------------------------------------------------
+    |
+    | This param specifies whether a multilingual application
+    | if(param == true) application is multilingual
+    | if(param == false) application isn't multilingual
+    */
+
+    'multilang' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Application langs
+    |--------------------------------------------------------------------------
+    | if application is multilingual then input lang in this array
+    | Example:
+    |   'langs' => ['en','ru'],
+    |
+    */
+    'langs' => ['en','ru'],
+    /*
+    |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
     |
@@ -153,6 +175,9 @@ return [
          */
         SleepingOwl\Admin\Providers\SleepingOwlServiceProvider::class,
         Intervention\Image\ImageServiceProviderLaravel5::class,
+        Barryvdh\Debugbar\ServiceProvider::class,
+        Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -206,7 +231,8 @@ return [
         'URL'       => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
-
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        'Image' => Intervention\Image\Facades\Image::class,
     ],
 
 ];

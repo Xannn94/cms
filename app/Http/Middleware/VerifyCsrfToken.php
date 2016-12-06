@@ -12,6 +12,13 @@ class VerifyCsrfToken extends BaseVerifier
      * @var array
      */
     protected $except = [
-        //
+        '/laravel-filemanager',
+        '/laravel-filemanager/upload/',
+        '/laravel-filemanager/upload?type=Images',
+        '/laravel-filemanager?type=Files',
+        '/laravel-filemanager/upload?type=Files',
+        '/upload-image/'
     ];
+
+
 }

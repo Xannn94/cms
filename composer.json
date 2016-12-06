@@ -10,7 +10,9 @@
         "laravelrus/sleepingowl": "dev-development",
         "baum/baum": "~1.1",
         "intervention/image": "^2.3",
-        "fzaninotto/faker": "~1.4"
+        "fzaninotto/faker": "~1.4",
+        "unisharp/laravel-filemanager": "^1.6",
+        "barryvdh/laravel-debugbar": "^2.3"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.1",
