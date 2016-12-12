@@ -13,6 +13,7 @@
             <ul class="dropdown-menu" role="menu" style="background: #3c8dbc;" aria-labelledby="dropdownMenu1">
                 @foreach(config('app.langs') as $lang)
                     <li role="presentation">
+
                         <a role="menuitem" tabindex="-1" style="color: #FFFFFF;" href="{{config('app.url')}}/{{config('sleeping_owl.url_prefix')}}/lang/{{$lang}}">{{$lang}}</a>
                     </li>
                 @endforeach
@@ -34,7 +35,6 @@
             <!-- User image -->
             <li class="user-header">
                 <img src="{{ $user->avatar_url_or_blank }}" class="img-circle" />
-
                 <p>
                     {{ $user->name }}
                     <small>@lang('sleeping_owl::lang.auth.since', ['date' => $user->created_at->format('d.m.Y')])</small>

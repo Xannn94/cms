@@ -111,7 +111,7 @@ class User extends Authenticatable
      */
     public function setPasswordAttribute($password)
     {
-        $this->attributes['password'] = bcrypt($password);
+        $this->attributes['password'] = $password;
     }
 
     /**
@@ -132,5 +132,13 @@ class User extends Authenticatable
     public function contacts()
     {
         return $this->belongsToMany(Contact::class, 'contact_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function tickets()
+    {
+        return $this->hasMany('App\Model\Ticket');
     }
 }

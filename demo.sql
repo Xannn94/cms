@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Дек 06 2016 г., 13:30
+-- Время создания: Дек 12 2016 г., 14:19
 -- Версия сервера: 5.6.31
--- Версия PHP: 7.0.8
+-- Версия PHP: 5.6.23
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -66,7 +66,6 @@ CREATE TABLE IF NOT EXISTS `contacts` (
   `birthday` date NOT NULL,
   `phone` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `address` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `country_id` int(10) unsigned DEFAULT NULL,
   `comment` text COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -296,14 +295,15 @@ CREATE TABLE IF NOT EXISTS `roles` (
   `label` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Дамп данных таблицы `roles`
 --
 
 INSERT INTO `roles` (`id`, `name`, `label`, `created_at`, `updated_at`) VALUES
-(1, 'admin', 'Администратор', '2016-12-04 10:54:20', '2016-12-04 10:54:20');
+(1, 'admin', 'Администратор', '2016-12-04 10:54:20', '2016-12-04 10:54:20'),
+(2, 'user', 'Пользователь', '2016-12-06 23:49:43', '2016-12-06 23:49:43');
 
 -- --------------------------------------------------------
 
@@ -324,7 +324,27 @@ CREATE TABLE IF NOT EXISTS `role_user` (
 INSERT INTO `role_user` (`role_id`, `user_id`) VALUES
 (1, 1),
 (1, 2),
-(1, 3);
+(1, 3),
+(1, 4),
+(1, 7),
+(1, 12),
+(1, 13),
+(2, 8),
+(2, 14);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `tickets`
+--
+
+DROP TABLE IF EXISTS `tickets`;
+CREATE TABLE IF NOT EXISTS `tickets` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `ticket` varchar(255) NOT NULL,
+  `in_play` tinyint(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -336,22 +356,38 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(10) unsigned NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `secondName` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
   `remember_token` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `avatar` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT ''
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `avatar` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `birthday` date NOT NULL,
+  `phone` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Дамп данных таблицы `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `password`, `remember_token`, `created_at`, `updated_at`, `avatar`) VALUES
-(1, 'xannn94', 'xannn94@mail.ru', 'd5e28e04d671e78044a6bd2c1ecdf405', NULL, '2016-12-04 10:29:20', '2016-12-04 10:29:20', ''),
-(2, 'admin', 'admin@admin.ru', '$2y$10$1b0wUlPyGq1ZHpN.BmrIC.sMtXTpTiOmuODSmg1jqsskA53cQjMQ2', NULL, '2016-12-04 21:59:37', '2016-12-04 21:59:37', ''),
-(3, 'axiles94', 'axiles94@mail.ru', '$2y$10$nEgkx5gnu4XO2N4yVr7Xpu05nluh4ziw92FHQagWM3nNCzhao2zf6', NULL, '2016-12-05 03:01:58', '2016-12-05 03:01:58', '');
+INSERT INTO `users` (`id`, `name`, `secondName`, `email`, `password`, `remember_token`, `created_at`, `updated_at`, `avatar`, `birthday`, `phone`) VALUES
+(12, 'xannn94', '', 'xannn94@mail.ru', '$2y$10$55D3cDAmSTUqRdceabj41O1e.jRAb/4FsHJNvWvyfUySjYxuFTL42', 'Tum2kfRFHcfWujHFdVAGmJEvYK71dsPxHYEeaYn3U7bw4R6CaDH3J4YDedsm', '2016-12-07 23:21:03', '2016-12-12 00:47:36', 'storage/users/avatar/dd/c20ad4d76fe97759aa27a0c99bff6710.jpg', '0000-00-00', ''),
+(14, 'axiles94', '', 'axiles94@gmail.com', '$2y$10$AQD7A1yX6SSX10dXdMVopeyWpaiV7p0hT9a8Cf5s.kBp0qNGx1Jea', '4ekicNpEvCN668akmeAPgUyOytMwAd6EZIDwpISwrQ0ePjf8NRI5iFk0pyfU', '2016-12-08 23:10:02', '2016-12-08 23:13:19', '', '0000-00-00', '');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `users_inform`
+--
+
+DROP TABLE IF EXISTS `users_inform`;
+CREATE TABLE IF NOT EXISTS `users_inform` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `passport` varchar(20) NOT NULL,
+  `bonus` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Индексы сохранённых таблиц
@@ -442,11 +478,23 @@ ALTER TABLE `role_user`
   ADD PRIMARY KEY (`role_id`,`user_id`);
 
 --
+-- Индексы таблицы `tickets`
+--
+ALTER TABLE `tickets`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Индексы таблицы `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `users_email_unique` (`email`);
+
+--
+-- Индексы таблицы `users_inform`
+--
+ALTER TABLE `users_inform`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT для сохранённых таблиц
@@ -501,12 +549,22 @@ ALTER TABLE `posts`
 -- AUTO_INCREMENT для таблицы `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT для таблицы `tickets`
+--
+ALTER TABLE `tickets`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=15;
+--
+-- AUTO_INCREMENT для таблицы `users_inform`
+--
+ALTER TABLE `users_inform`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
