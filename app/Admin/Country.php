@@ -45,5 +45,5 @@ AdminSection::registerModel(Country::class, function (ModelConfiguration $model)
         return $form;
     });
 })
-    ->addMenuPage(Country::class)
-    ->setIcon('fa fa-globe');
+    /*->addMenuPage(Country::class)
+    ->setIcon('fa fa-globe')*/;

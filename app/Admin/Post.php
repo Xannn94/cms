@@ -1,39 +1,41 @@
 <?php
 
-
 use App\Model\Post;
 use SleepingOwl\Admin\Model\ModelConfiguration;
 
 AdminSection::registerModel(Post::class, function (ModelConfiguration $model) {
-    /*App::setLocale('en');*/
+    $model->setTitle('Форум')->setAlias('forum');
 
     // Display
-    $model->setTitle(Lang::get('news.title'));
-
     $model->onDisplay(function () {
-        $display = AdminDisplay::datatables();
+        $display = AdminDisplay::datatables()->setHtmlAttribute('class', 'table-primary');
         $display->setOrder([[1, 'desc']]);
-        $display->setApply(function ($query) {
-            $query->orderBy('created_at', 'asc');
-        });
-
-        $display->setHtmlAttribute('class', 'table-bordered table-success table-hover');
 
         $display->setColumns([
-            AdminColumn::link('title')->setLabel('Заголовок'),
-            AdminColumnEditable::checkbox('public')->setLabel('Опубликовать')
-        ])->paginate(5);
+            AdminColumn::link('title')->setLabel('Заголовок')->setOrderable(false),
+            AdminColumn::text('preview')->setLabel('Краткое описание')->setWidth('300 px;')->setOrderable(false),
+            AdminColumn::datetime('created_at')->setLabel('Дата создания')->setFormat('d.m.Y H:i:s')->setWidth('150px'),
+            AdminColumn::text('likes')->setLabel('Лайки')->setWidth('80 px'),
+            AdminColumn::text('dislikes')->setLabel('ДизЛайки')->setWidth('80 px'),
+        ]);
 
         return $display;
     });
 
     // Create And Edit
     $model->onCreateAndEdit(function() {
-        return AdminForm::form()->setItems([
-            AdminFormElement::text('title', 'Заголовок')->required(),
-            AdminFormElement::wysiwyg('text', 'Text', 'ckeditor')->required()->setFilteredValueToField('text_html'),
-            AdminFormElement::checkbox('public','Опубликовать'),
+        $form = AdminForm::panel()
+            ->addBody([
+                AdminFormElement::text('title', 'Заголовок темы')->required(),
+                AdminFormElement::textarea('preview', 'Краткое описание')->required(),
+            ])->addBody([
+                AdminFormElement::wysiwyg('content', 'Описание темы')->setEditor('tinymce'),
+            ]);
 
-        ]);
+        $form->getButtons()
+            ->setSaveButtonText('Сохранить тему')
+            ->hideSaveAndCloseButton();
+
+        return $form;
     });
 })->addMenuPage(Post::class)->setIcon('fa fa-newspaper-o');

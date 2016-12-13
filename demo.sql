@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Дек 12 2016 г., 14:19
+-- Время создания: Дек 13 2016 г., 13:04
 -- Версия сервера: 5.6.31
--- Версия PHP: 5.6.23
+-- Версия PHP: 7.0.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -19,6 +19,35 @@ SET time_zone = "+00:00";
 --
 -- База данных: `demo`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `chats`
+--
+
+DROP TABLE IF EXISTS `chats`;
+CREATE TABLE IF NOT EXISTS `chats` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `message` text NOT NULL,
+  `created_at` timestamp NOT NULL,
+  `updated_at` timestamp NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `comments`
+--
+
+DROP TABLE IF EXISTS `comments`;
+CREATE TABLE IF NOT EXISTS `comments` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `posts_id` int(11) NOT NULL,
+  `text` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -71,7 +100,15 @@ CREATE TABLE IF NOT EXISTS `contacts` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `height` int(10) unsigned DEFAULT NULL,
   `user_id` int(10) unsigned DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Дамп данных таблицы `contacts`
+--
+
+INSERT INTO `contacts` (`id`, `firstName`, `lastName`, `photo`, `birthday`, `phone`, `address`, `comment`, `created_at`, `updated_at`, `height`, `user_id`) VALUES
+(1, '123123', 'asdasdsad', NULL, '2016-12-05', '', 'asdasd', 'asdasdasd', '2016-12-05 18:00:00', '2016-12-05 18:00:00', 100, 12),
+(2, 'asd', 'qweqwe', NULL, '2016-12-12', '123123', 'asdasdasd', '123123123', '2016-12-05 18:00:00', '2016-12-05 18:00:00', 123123123, 12);
 
 -- --------------------------------------------------------
 
@@ -125,6 +162,24 @@ CREATE TABLE IF NOT EXISTS `forms` (
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `forum`
+--
+
+DROP TABLE IF EXISTS `forum`;
+CREATE TABLE IF NOT EXISTS `forum` (
+  `id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `shot_desc` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `created_at` timestamp NOT NULL,
+  `updated_at` timestamp NOT NULL,
+  `likes` int(11) NOT NULL,
+  `dislikes` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `migrations`
 --
 
@@ -165,19 +220,21 @@ DROP TABLE IF EXISTS `news`;
 CREATE TABLE IF NOT EXISTS `news` (
   `id` int(10) unsigned NOT NULL,
   `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `date` date NOT NULL,
-  `published` tinyint(1) NOT NULL,
   `text` text COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `text_html` text COLLATE utf8_unicode_ci NOT NULL,
+  `public` int(11) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Дамп данных таблицы `news`
 --
 
-INSERT INTO `news` (`id`, `title`, `date`, `published`, `text`, `created_at`, `updated_at`) VALUES
-(1, 'asdsad', '2006-12-20', 1, '<p>sadasdasd</p>\r\n', '2016-12-04 10:24:38', '2016-12-04 10:24:41');
+INSERT INTO `news` (`id`, `title`, `text`, `created_at`, `updated_at`, `deleted_at`, `text_html`, `public`) VALUES
+(1, 'новость 1', '<ol>\r\n	<li><img alt="" src="/uploads/2/58451e795aa55.jpg" style="height:922px; width:600px" />фывфыв</li>\r\n	<li>йцуйцу</li>\r\n	<li><a href="/files/2/58451e96e2134.jpg">сячсчяс</a></li>\r\n</ol>\r\n', '2016-12-04 11:00:15', '2016-12-05 02:00:31', NULL, '<ol>\r\n	<li><img alt="" src="/uploads/2/58451e795aa55.jpg" style="height:922px; width:600px" />фывфыв</li>\r\n	<li>йцуйцу</li>\r\n	<li><a href="/files/2/58451e96e2134.jpg">сячсчяс</a></li>\r\n</ol>\r\n', 1),
+(2, 'новость 2', '<p>привет</p>\r\n', '2016-12-05 02:16:32', '2016-12-13 00:03:39', NULL, '<p>привет</p>\r\n', 1);
 
 -- --------------------------------------------------------
 
@@ -206,8 +263,8 @@ CREATE TABLE IF NOT EXISTS `pages` (
 --
 
 INSERT INTO `pages` (`id`, `parent_id`, `lft`, `rgt`, `depth`, `title`, `text`, `created_at`, `updated_at`, `public`, `link`, `lang`) VALUES
-(1, NULL, 1, 2, 0, 'Контакты', '<p>это контакты</p>\r\n\r\n<ol>\r\n	<li>фывфыв</li>\r\n	<li>фывфыв</li>\r\n	<li>фывфывф</li>\r\n</ol>\r\n', '2016-12-04 10:27:21', '2016-12-05 03:13:00', 1, 'йцуйцуйцу', 'ru'),
-(2, NULL, 3, 4, 0, 'О нас', '<p>фывфывфыв</p>\r\n', '2016-12-04 10:27:36', '2016-12-05 03:13:00', 0, '', 'ru');
+(1, NULL, 1, 2, 0, 'Контакты', '<p>это контакты</p>\r\n\r\n<ol>\r\n	<li>фывфыв</li>\r\n	<li>фывфыв</li>\r\n	<li>фывфывф</li>\r\n</ol>\r\n', '2016-12-04 10:27:21', '2016-12-13 00:05:11', 1, 'йцуйцуйцу', 'ru'),
+(2, NULL, 3, 4, 0, 'О нас', '<p>фывфывфыв</p>\r\n', '2016-12-04 10:27:36', '2016-12-13 00:05:11', 0, '', 'ru');
 
 -- --------------------------------------------------------
 
@@ -259,28 +316,57 @@ CREATE TABLE IF NOT EXISTS `permission_role` (
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `plays`
+--
+
+DROP TABLE IF EXISTS `plays`;
+CREATE TABLE IF NOT EXISTS `plays` (
+  `id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `main_image` varchar(255) NOT NULL,
+  `price` int(11) NOT NULL,
+  `public` tinyint(4) NOT NULL,
+  `order` int(10) NOT NULL,
+  `created_at` timestamp NOT NULL,
+  `updated_at` timestamp NOT NULL,
+  `finished_at` timestamp NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `plays`
+--
+
+INSERT INTO `plays` (`id`, `title`, `description`, `main_image`, `price`, `public`, `order`, `created_at`, `updated_at`, `finished_at`) VALUES
+(1, 'Розыгрыш 1', '<p>такой вот розыгрыш</p>\r\n\r\n<ol>\r\n	<li>йцуйцу</li>\r\n	<li>фывфывфыв</li>\r\n</ol>\r\n', 'storage/plays/main_image/6d/d41d8cd98f00b204e9800998ecf8427e.png', 1000, 1, 0, '2016-12-13 02:53:56', '2016-12-13 03:55:44', '0000-00-00 00:00:00'),
+(2, 'розыгрыш 2', '<p>второфй фывфыв</p>\r\n\r\n<p>йцуфвыв ыфвыфвфы вфы выфв ыфвфыв фывыф выф<img alt="" src="/uploads/12/584fb93e16ef9.jpg" style="height:154px; width:100px" /></p>\r\n', 'storage/plays/main_image/f5/d41d8cd98f00b204e9800998ecf8427e.jpg', 2000, 1, 2, '2016-12-13 03:03:17', '2016-12-13 03:56:26', '0000-00-00 00:00:00'),
+(3, 'Розыгрыш 3', '<p>фвфывфыв</p>\r\n', 'storage/plays/main_image/6d/d41d8cd98f00b204e9800998ecf8427e.png', 0, 0, 1, '2016-12-13 03:04:49', '2016-12-13 03:56:26', '0000-00-00 00:00:00');
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `posts`
 --
 
 DROP TABLE IF EXISTS `posts`;
 CREATE TABLE IF NOT EXISTS `posts` (
-  `id` int(10) unsigned NOT NULL,
-  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `text` text COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  `deleted_at` timestamp NULL DEFAULT NULL,
-  `text_html` text COLLATE utf8_unicode_ci NOT NULL,
-  `public` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `preview` varchar(255) NOT NULL,
+  `content` text NOT NULL,
+  `created_at` timestamp NOT NULL,
+  `updated_at` timestamp NOT NULL,
+  `likes` int(11) NOT NULL,
+  `dislikes` int(11) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `posts`
 --
 
-INSERT INTO `posts` (`id`, `title`, `text`, `created_at`, `updated_at`, `deleted_at`, `text_html`, `public`) VALUES
-(1, 'новость 1', '<ol>\r\n	<li><img alt="" src="/uploads/2/58451e795aa55.jpg" style="height:922px; width:600px" />фывфыв</li>\r\n	<li>йцуйцу</li>\r\n	<li><a href="/files/2/58451e96e2134.jpg">сячсчяс</a></li>\r\n</ol>\r\n', '2016-12-04 11:00:15', '2016-12-05 02:00:31', NULL, '<ol>\r\n	<li><img alt="" src="/uploads/2/58451e795aa55.jpg" style="height:922px; width:600px" />фывфыв</li>\r\n	<li>йцуйцу</li>\r\n	<li><a href="/files/2/58451e96e2134.jpg">сячсчяс</a></li>\r\n</ol>\r\n', 1),
-(2, 'новость 2', '<p>привет</p>\r\n', '2016-12-05 02:16:32', '2016-12-05 02:16:32', NULL, '<p>привет</p>\r\n', 0);
+INSERT INTO `posts` (`id`, `title`, `preview`, `content`, `created_at`, `updated_at`, `likes`, `dislikes`) VALUES
+(1, 'тема 1', 'Описание 1', '<h2>фывфывфыв</h2>\r\n<p>213213213</p>\r\n<p>вфывфцуйу</p>\r\n<p style="text-align: center;">фывфывфыв</p>', '2016-12-13 00:36:54', '2016-12-13 00:36:54', 1, 0),
+(2, 'тема 2', 'фывфывфыв', '<p>йцуйцуу</p>', '2016-12-13 00:40:35', '2016-12-13 00:40:35', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -342,9 +428,18 @@ DROP TABLE IF EXISTS `tickets`;
 CREATE TABLE IF NOT EXISTS `tickets` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
+  `play_id` int(11) NOT NULL,
   `ticket` varchar(255) NOT NULL,
   `in_play` tinyint(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `tickets`
+--
+
+INSERT INTO `tickets` (`id`, `user_id`, `play_id`, `ticket`, `in_play`) VALUES
+(1, 12, 0, 'tiket1', 0),
+(2, 12, 0, 'ticket2', 0);
 
 -- --------------------------------------------------------
 
@@ -392,6 +487,18 @@ CREATE TABLE IF NOT EXISTS `users_inform` (
 --
 -- Индексы сохранённых таблиц
 --
+
+--
+-- Индексы таблицы `chats`
+--
+ALTER TABLE `chats`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `comments`
+--
+ALTER TABLE `comments`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Индексы таблицы `companies`
@@ -460,6 +567,12 @@ ALTER TABLE `permission_role`
   ADD PRIMARY KEY (`permission_id`,`role_id`);
 
 --
+-- Индексы таблицы `plays`
+--
+ALTER TABLE `plays`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Индексы таблицы `posts`
 --
 ALTER TABLE `posts`
@@ -501,6 +614,16 @@ ALTER TABLE `users_inform`
 --
 
 --
+-- AUTO_INCREMENT для таблицы `chats`
+--
+ALTER TABLE `chats`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблицы `comments`
+--
+ALTER TABLE `comments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT для таблицы `companies`
 --
 ALTER TABLE `companies`
@@ -514,7 +637,7 @@ ALTER TABLE `company_contact`
 -- AUTO_INCREMENT для таблицы `contacts`
 --
 ALTER TABLE `contacts`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT для таблицы `countries`
 --
@@ -529,7 +652,7 @@ ALTER TABLE `forms`
 -- AUTO_INCREMENT для таблицы `news`
 --
 ALTER TABLE `news`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT для таблицы `pages`
 --
@@ -541,10 +664,15 @@ ALTER TABLE `pages`
 ALTER TABLE `permissions`
   MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT для таблицы `plays`
+--
+ALTER TABLE `plays`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+--
 -- AUTO_INCREMENT для таблицы `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT для таблицы `roles`
 --
@@ -554,7 +682,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT для таблицы `tickets`
 --
 ALTER TABLE `tickets`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT для таблицы `users`
 --

@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Model\Contact;
+use App\Model\Ticket;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use KodiComponents\Support\Upload;
 use Illuminate\Http\UploadedFile;
@@ -20,6 +21,7 @@ use Illuminate\Http\UploadedFile;
  * @property string $avatar
  * @property-read mixed $avatar_url_or_blank
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Model\Contact[] $contacts
+ * * @property-read \Illuminate\Database\Eloquent\Collection|\App\Model\Ticket[] $tickets
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Role[] $roles
  * @method static \Illuminate\Database\Query\Builder|\App\User whereId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\User whereName($value)
@@ -139,6 +141,7 @@ class User extends Authenticatable
      */
     public function tickets()
     {
-        return $this->hasMany('App\Model\Ticket');
+        return $this->hasMany(Ticket::class);
     }
+
 }
